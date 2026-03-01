@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/jobs/process-inbound",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/jobs/send-outbound",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/jobs/process-broadcasts",
+      "schedule": "*/3 * * * *"
+    }
+  ]
+}
