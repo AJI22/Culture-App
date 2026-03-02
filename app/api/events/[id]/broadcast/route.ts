@@ -1,3 +1,8 @@
+/**
+ * Broadcast API: queue a broadcast job. Does not send immediately — process-broadcasts cron
+ * expands segment_ids to guest list and enqueues one send job per guest on queue:send.
+ * Body: segment_ids (array), body (message text), channel (WHATSAPP | SMS | EMAIL, default WHATSAPP).
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";

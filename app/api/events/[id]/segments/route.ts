@@ -1,3 +1,7 @@
+/**
+ * Segments API: create and list segments for an event (e.g. Family, VIP, Friends).
+ * Events have 2–6 segments; used for guest grouping and broadcast targeting.
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
@@ -12,6 +16,7 @@ async function ensureHost(eventId: string, userId: string) {
   if (!data) throw new Error("Forbidden");
 }
 
+/** Create a segment. Body: { name }. Enforce 2–6 segments in UI. */
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -43,6 +48,7 @@ export async function POST(
   }
 }
 
+/** List all segments for the event (ordered by name). */
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }

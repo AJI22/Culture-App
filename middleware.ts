@@ -1,9 +1,12 @@
+/**
+ * Global middleware: Clerk auth. Protects /app and /api/events/* so only signed-in hosts can access.
+ * Does NOT protect /api/webhooks/* (Twilio) or /api/jobs/* (cron uses CRON_SECRET in the route).
+ */
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher(["/app(.*)", "/api/events(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // Protect host dashboard and event admin APIs (not webhooks - those are public)
   if (isProtectedRoute(req) && !req.nextUrl.pathname.startsWith("/api/webhooks")) {
     await auth.protect();
   }

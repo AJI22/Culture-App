@@ -1,3 +1,8 @@
+/**
+ * Supabase client for database (Postgres) and storage.
+ * Uses the service role key for server-side access (bypasses RLS).
+ * See docs/SUPABASE_SETUP.md for env vars and migration instructions.
+ */
 import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
@@ -9,6 +14,7 @@ if (!url || !serviceKey) {
   );
 }
 
+/** Singleton client. Placeholder URL/key used at build time when env is missing. */
 export const supabase = createClient(
   url || "https://placeholder.supabase.co",
   serviceKey || "placeholder",

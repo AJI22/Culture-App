@@ -1,3 +1,8 @@
+/**
+ * Process-broadcasts cron job: consumes queue:broadcast, expands recipients by segment, enqueues one send job per guest.
+ * Called by Vercel Cron every 2–5 min (e.g. */3 * * * *). Secured with CRON_SECRET. Does not send directly —
+ * send-outbound job does the actual Twilio/Resend send. See docs/ARCHITECTURE.md and docs/VERCEL_SETUP.md.
+ */
 import { NextResponse } from "next/server";
 import { getRedis, QUEUE_BROADCAST, QUEUE_SEND } from "@/lib/redis";
 import { supabase } from "@/lib/supabase";
@@ -34,6 +39,7 @@ export async function POST(req: Request) {
     const { event_id, segment_ids, body, channel } = payload;
     const ch = channel === "EMAIL" ? "EMAIL" : channel === "SMS" ? "sms" : "whatsapp";
 
+    /** All guests in the selected segments (may appear in multiple segments — dedupe by phone). */
     const { data: guests } = await supabase
       .from("guests")
       .select("phone_e164")

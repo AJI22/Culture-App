@@ -1,7 +1,13 @@
+/**
+ * WhatsApp intelligence engine: intent classification, response generation, escalation summarization.
+ * Used by the process-inbound cron job. Bot answers only from retrieved context; unknown → clarify or escalate.
+ * See docs/ARCHITECTURE.md for the full inbound flow.
+ */
 import OpenAI from "openai";
 import { getOpenAIClient } from "./openai";
 import type { EscalationRole } from "./db-types";
 
+/** Supported intents for guest messages; used for routing and automation (e.g. RSVP → update status). */
 export const INTENTS = [
   "RSVP",
   "VENUE",
@@ -16,6 +22,7 @@ export const INTENTS = [
 ] as const;
 export type IntentType = (typeof INTENTS)[number];
 
+/** After classification: answer from context, ask one clarifying question, or escalate to a role. */
 export const SUGGESTED_ACTIONS = ["ANSWER", "CLARIFY", "ESCALATE"] as const;
 export type SuggestedAction = (typeof SUGGESTED_ACTIONS)[number];
 
@@ -38,6 +45,7 @@ const intentSchema = {
   additionalProperties: false,
 };
 
+/** Classify guest message into intent + confidence + suggested_action (and optional escalation_target). Returns structured JSON. */
 export async function classifyIntent(
   message: string,
   eventContext: string
@@ -69,6 +77,7 @@ export interface ResponseGeneration {
   escalation_summary?: string;
 }
 
+/** Generate reply from retrieved context only; no hallucination. Outputs final_reply and optional escalation. */
 export async function generateResponse(
   message: string,
   intent: IntentClassification,
@@ -94,6 +103,7 @@ export async function generateResponse(
   return JSON.parse(raw) as ResponseGeneration;
 }
 
+/** Short summary for the delegate (e.g. RSVP lead) so they get context without raw message spam. */
 export async function summarizeForEscalation(
   message: string,
   intent: IntentType,

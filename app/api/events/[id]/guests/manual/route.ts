@@ -1,3 +1,7 @@
+/**
+ * Manual guest add: one guest at a time. Body: name, phone, segment_id (required); plus_one_allowed (optional).
+ * Phone is normalized to E.164. Upserts on (event_id, phone_e164) so duplicate phones update the row.
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";

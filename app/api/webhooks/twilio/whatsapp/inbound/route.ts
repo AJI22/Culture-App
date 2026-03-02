@@ -1,9 +1,13 @@
+/**
+ * Twilio inbound webhook: called by Twilio when a WhatsApp or SMS message is received.
+ * Public endpoint (no Clerk); rate-limited by IP. Parses form body, normalizes sender phone to E.164,
+ * and pushes one job per message onto queue:process_inbound. Returns 200 quickly so Twilio does not retry.
+ * Configure this URL in Twilio (Messaging / WhatsApp sandbox) — see docs/TWILIO_SETUP.md.
+ */
 import { NextResponse } from "next/server";
 import { pushToQueue, QUEUE_PROCESS_INBOUND } from "@/lib/redis";
 import { getWebhookRatelimit } from "@/lib/ratelimit";
 import { normalizePhone } from "@/lib/phone";
-
-const BATCH_SIZE = 50;
 
 export async function POST(req: Request) {
   const ratelimit = getWebhookRatelimit();

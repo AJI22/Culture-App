@@ -1,3 +1,8 @@
+/**
+ * Twilio client for WhatsApp and SMS.
+ * Used for outbound invites, broadcasts, and bot replies; inbound handled via webhooks.
+ * See docs/TWILIO_SETUP.md for sandbox/production setup and webhook URLs.
+ */
 import twilio from "twilio";
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -24,11 +29,12 @@ export function getSmsFrom(): string {
   return smsFrom;
 }
 
+/** Resolve the "from" number for a given channel (WhatsApp vs SMS). */
 export function getFromForChannel(channel: OutboundChannel): string {
   return channel === "whatsapp" ? getWhatsAppFrom() : getSmsFrom();
 }
 
-/** Send WhatsApp message. To number must be E.164; use whatsapp:+... for WhatsApp API. */
+/** Send WhatsApp message. To number must be E.164; Twilio expects whatsapp:+... for WhatsApp API. */
 export async function sendWhatsApp(
   toE164: string,
   body: string,

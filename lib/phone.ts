@@ -1,9 +1,15 @@
+/**
+ * Phone number normalization to E.164.
+ * Used when adding/importing guests and when processing inbound messages so we can
+ * match senders to guests by (event_id, phone_e164). Default region NG (Nigeria).
+ */
 import { parsePhoneNumberWithError, type CountryCode } from "libphonenumber-js";
 
 const DEFAULT_REGION: CountryCode = "NG";
 
 /**
  * Normalize phone to E.164. Returns null if invalid.
+ * Handles spaces, leading 00, and optional country code.
  */
 export function normalizePhone(
   input: string,

@@ -1,3 +1,7 @@
+/**
+ * TypeScript types for database entities. Match supabase/migrations schema.
+ * Used across API routes, jobs, and UI. See ARCHITECTURE.md for table roles.
+ */
 export type RsvpStatus = "INVITED" | "YES" | "NO" | "MAYBE";
 export type KnowledgeType = "FACT" | "FAQ" | "POLICY";
 export type MessageDirection = "IN" | "OUT";

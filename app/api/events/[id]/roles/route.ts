@@ -1,3 +1,7 @@
+/**
+ * Event roles API: assign delegates (RSVP, LOGISTICS, SECURITY, HOST) with phone numbers.
+ * Escalations from the WhatsApp flow are routed to these roles; they receive summarized messages.
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
@@ -15,6 +19,7 @@ async function ensureHost(eventId: string, userId: string) {
 
 const ROLES = ["HOST", "RSVP", "LOGISTICS", "SECURITY"] as const;
 
+/** Add a role. Body: role, phone (required); display_name (optional). Phone normalized to E.164. */
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -49,6 +54,7 @@ export async function POST(
   }
 }
 
+/** List all roles for the event. */
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }

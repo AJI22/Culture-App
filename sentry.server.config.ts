@@ -1,3 +1,4 @@
+/** Sentry server init (API routes, server components). See docs/SENTRY_SETUP.md. */
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({

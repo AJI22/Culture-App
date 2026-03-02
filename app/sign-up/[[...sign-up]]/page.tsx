@@ -1,3 +1,6 @@
+/**
+ * Clerk sign-up page (route: /sign-up). Redirects to /app after sign-up. Links to sign-in for existing users.
+ */
 import { SignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {

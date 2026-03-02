@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * New event form (route: /app/events/new). Creates event via POST /api/events then redirects to event detail.
+ * Fields: name, start_time (required); venue_maps_url (for "Open in Google Maps"), dress_code, notes (optional).
+ */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

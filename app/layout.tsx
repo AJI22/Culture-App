@@ -1,3 +1,7 @@
+/**
+ * Root layout: fonts (Playfair/Cormorant for headings, Inter/Source Sans for body), ClerkProvider when configured.
+ * Clerk only wraps app when NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is set (pk_...) so build succeeds without env.
+ */
 import type { Metadata } from "next";
 import {
   Playfair_Display,
@@ -55,6 +59,7 @@ export default function RootLayout({
       </body>
     </html>
   );
+  /** Only enable Clerk when a valid publishable key is present (avoids build-time errors when env is missing). */
   if (clerkKey && clerkKey.startsWith("pk_"))
     return <ClerkProvider publishableKey={clerkKey}>{content}</ClerkProvider>;
   return content;

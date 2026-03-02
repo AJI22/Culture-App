@@ -1,3 +1,4 @@
+/** Sentry Edge runtime init (if any edge routes are used). See docs/SENTRY_SETUP.md. */
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({

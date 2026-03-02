@@ -1,3 +1,8 @@
+/**
+ * Send-outbound cron job: consumes queue:send and sends via Twilio (WhatsApp/SMS) or Resend (email).
+ * Called by Vercel Cron every minute. Secured with CRON_SECRET. Inserts messages row (QUEUED → SENT),
+ * passes statusCallback for Twilio so status webhook can update to DELIVERED/FAILED. See docs/VERCEL_SETUP.md.
+ */
 import { NextResponse } from "next/server";
 import { getRedis, QUEUE_SEND } from "@/lib/redis";
 import { sendWhatsApp, sendSms } from "@/lib/twilio";

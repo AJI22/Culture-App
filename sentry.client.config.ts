@@ -1,3 +1,4 @@
+/** Sentry browser/client init. Errors and breadcrumbs; see docs/SENTRY_SETUP.md. */
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({

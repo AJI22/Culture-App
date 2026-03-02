@@ -1,3 +1,9 @@
+/**
+ * Bulk guest import. Two modes:
+ * 1) entries: array of { name?, phone } (e.g. from a contact-import flow).
+ * 2) pasted_numbers: string — one number per line or comma/semicolon separated; optional "Name +123..." format.
+ * No CSV file upload. Phones normalized to E.164; duplicates by phone deduped per event.
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
@@ -35,6 +41,7 @@ export async function POST(
 
     let toInsert: { name: string; phone_e164: string }[] = [];
 
+    /** Mode 1: entries array (e.g. from contact picker). Mode 2: pasted_numbers string (see file comment). */
     if (entries && Array.isArray(entries)) {
       for (const e of entries) {
         const phone = e.phone ?? e.Phone ?? e.phone_e164;

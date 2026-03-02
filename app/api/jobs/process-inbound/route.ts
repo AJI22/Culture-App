@@ -1,3 +1,10 @@
+/**
+ * Process-inbound cron job: consumes queue:process_inbound (one job per inbound WhatsApp/SMS).
+ * Called by Vercel Cron every minute. Secured with CRON_SECRET (header or query).
+ * Flow: resolve guest by phone → classify intent (OpenAI) → retrieve event + knowledge → generate reply
+ * → confidence gating & escalation → optional RSVP/plus-one update → enqueue reply on queue:send, persist message & escalation.
+ * See docs/ARCHITECTURE.md and docs/VERCEL_SETUP.md.
+ */
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getRedis, QUEUE_PROCESS_INBOUND, QUEUE_SEND } from "@/lib/redis";
@@ -13,6 +20,7 @@ import type { EscalationRole } from "@/lib/db-types";
 const CRON_SECRET = process.env.CRON_SECRET;
 const BATCH_SIZE = 10;
 
+/** Require Authorization: Bearer <CRON_SECRET> or x-cron-secret / ?key= for cron invocations. */
 function verifyCron(req: Request) {
   const auth = req.headers.get("authorization");
   const secret = req.headers.get("x-cron-secret") ?? new URL(req.url).searchParams.get("key");
@@ -43,6 +51,7 @@ export async function POST(req: Request) {
     const normalized = normalizePhone(phone_e164) ?? phone_e164;
 
     try {
+      /** Identity resolution: find guest(s) by phone; if multiple events, use conversation state (Redis) to disambiguate. */
       const { data: guests } = await supabase
         .from("guests")
         .select("id, event_id, segment_id, name, plus_one_allowed, plus_one_count, rsvp_status")
@@ -63,6 +72,7 @@ export async function POST(req: Request) {
         await redis.set(convKey, eventId, { ex: 60 * 60 * 24 * 7 });
       }
 
+      /** Unknown guest: send polite reply and do not process further. */
       if (!eventId || !guest) {
         const reply =
           "We couldn't find your invitation for this number. Please contact the host directly.";

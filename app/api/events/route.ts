@@ -1,7 +1,12 @@
+/**
+ * Events API: create and list events for the signed-in host.
+ * Protected by Clerk; host_user_id is set from auth(). Used by dashboard /app and /app/events/new.
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 
+/** Create a new event. Body: name, start_time (required); venue_maps_url, dress_code, notes, cover_image_url (optional). */
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
@@ -40,6 +45,7 @@ export async function POST(req: Request) {
   }
 }
 
+/** List all events for the signed-in host (most recent first). */
 export async function GET() {
   try {
     const { userId } = await auth();

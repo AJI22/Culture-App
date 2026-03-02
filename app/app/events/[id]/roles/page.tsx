@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Roles management page (route: /app/events/[id]/roles). List roles and add new ones (HOST, RSVP, LOGISTICS, SECURITY)
+ * with phone (E.164) and optional display name. Used by host to assign delegates for escalation routing.
+ */
 import { useState, useEffect } from "react";
 import Link from "next/link";
 

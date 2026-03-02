@@ -1,3 +1,7 @@
+/**
+ * Clerk sign-in page (route: /sign-in). Redirects to /app after successful sign-in (see docs/CLERK_SETUP.md).
+ * Styled to match design system (primary green, ivory background).
+ */
 import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {

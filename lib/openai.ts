@@ -1,3 +1,7 @@
+/**
+ * OpenAI client for intent classification, response generation, summarization, and optional embeddings.
+ * Used by the WhatsApp intelligence engine (process-inbound job). See docs/OPENAI_SETUP.md.
+ */
 import OpenAI from "openai";
 
 const apiKey = process.env.OPENAI_API_KEY;
@@ -8,9 +12,11 @@ export function getOpenAIClient(): OpenAI {
   return openai;
 }
 
+/** Model and dimension for knowledge_items embeddings (pgvector). Optional feature. */
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIM = 1536;
 
+/** Get embedding vector for a string; used when storing or searching knowledge_items by similarity. */
 export async function getEmbedding(text: string): Promise<number[]> {
   const client = getOpenAIClient();
   const res = await client.embeddings.create({

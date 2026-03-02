@@ -1,3 +1,7 @@
+/**
+ * Public guest event page (route: /e/[id]). No auth. Shows event name, date/time, dress code, notes,
+ * and "Open in Google Maps" button when venue_maps_url is set. Share this link with guests for event details.
+ */
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 

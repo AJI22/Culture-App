@@ -1,8 +1,14 @@
 "use client";
 
+/**
+ * Event dashboard: single-event view for hosts. Shows above-the-fold metrics (confirmed, pending, escalations),
+ * segment breakdown, open escalations, roles, guests, and modals for broadcast, add guest, import, add segment, add FAQ.
+ * Uses design tokens from docs/UI_DESIGN_SYSTEM.md. All mutations go through /api/events/[id]/... routes.
+ */
 import { useState } from "react";
 import Link from "next/link";
 
+/** Optional segment name → Tailwind classes for color-coded segment badges (see UI_DESIGN_SYSTEM). */
 const SEGMENT_COLORS: Record<string, string> = {
   Family: "bg-[#6A1E2D]/20 text-[#6A1E2D]",
   VIP: "bg-[#C8A951]/30 text-[#0F3D2E]",

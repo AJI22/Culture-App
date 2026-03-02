@@ -1,7 +1,12 @@
+/**
+ * Single event API: fetch one event by id. Caller must be the host (ensureHost).
+ * Used by event detail page and API consumers that need full event record.
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 
+/** Verify the signed-in user is the host of this event; throw Forbidden otherwise. */
 async function ensureHost(eventId: string, userId: string) {
   const { data } = await supabase
     .from("events")
@@ -12,6 +17,7 @@ async function ensureHost(eventId: string, userId: string) {
   if (!data) throw new Error("Forbidden");
 }
 
+/** Get event by id. Returns 404 if not found or not host. */
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }

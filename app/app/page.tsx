@@ -1,3 +1,7 @@
+/**
+ * Host dashboard entry (route: /app). Protected; redirects to sign-in if not authenticated.
+ * Lists the host's events and provides "Create Event" CTA. Empty state when no events.
+ */
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

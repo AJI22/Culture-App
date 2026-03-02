@@ -1,3 +1,7 @@
+/**
+ * Public landing page (route: /). No auth required.
+ * Markets the product and directs users to sign-in to create events. Design: docs/UI_DESIGN_SYSTEM.md.
+ */
 import Link from "next/link";
 
 export default function LandingPage() {

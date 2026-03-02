@@ -1,3 +1,8 @@
+/**
+ * Knowledge items API: FAQs, facts, and policies per event.
+ * Used by the WhatsApp intelligence engine to answer guest questions; only answers from this context (no hallucination).
+ * Types: FACT, FAQ, POLICY. Optional: embedding for pgvector similarity search (not set here).
+ */
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
@@ -14,6 +19,7 @@ async function ensureHost(eventId: string, userId: string) {
 
 const TYPES = ["FACT", "FAQ", "POLICY"] as const;
 
+/** Create a knowledge item. Body: type, title, content. */
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -51,6 +57,7 @@ export async function POST(
   }
 }
 
+/** List all knowledge items for the event (newest first). */
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }

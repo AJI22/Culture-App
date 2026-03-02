@@ -1,3 +1,8 @@
+/**
+ * Event detail page (route: /app/events/[id]). Server component: loads event, segments, guests, escalations, roles
+ * for the signed-in host, then renders EventDashboard with above-the-fold counts (confirmed, pending).
+ * Redirects to /app if not host or event not found.
+ */
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

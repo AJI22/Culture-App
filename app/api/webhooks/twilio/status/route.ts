@@ -1,3 +1,8 @@
+/**
+ * Twilio status callback: called when an outbound message delivery status changes (sent, delivered, failed).
+ * Public endpoint; rate-limited. Updates the messages row by twilio_message_sid so the dashboard shows delivery status.
+ * Set as statusCallback when sending via Twilio (see send-outbound job). See docs/TWILIO_SETUP.md.
+ */
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getWebhookRatelimit } from "@/lib/ratelimit";
@@ -17,6 +22,7 @@ export async function POST(req: Request) {
     const status = form.get("MessageStatus")?.toString();
     if (!messageSid) return NextResponse.json({ error: "MessageSid required" }, { status: 400 });
 
+    /** Map Twilio status values to our messages.status enum. */
     const map: Record<string, string> = {
       delivered: "DELIVERED",
       failed: "FAILED",

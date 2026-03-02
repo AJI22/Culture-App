@@ -1,7 +1,8 @@
 -- Culture App: initial schema
--- Apply after enabling pgvector: CREATE EXTENSION IF NOT EXISTS vector;
+-- Apply in Supabase SQL Editor (or via supabase db push after linking). See docs/SUPABASE_SETUP.md.
+-- Prerequisite: enable pgvector in the project (Database → Extensions, or: CREATE EXTENSION IF NOT EXISTS vector;).
 
--- Events (host = Clerk user id)
+-- Events: one row per event; host_user_id = Clerk user id
 CREATE TABLE IF NOT EXISTS events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   host_user_id TEXT NOT NULL,
